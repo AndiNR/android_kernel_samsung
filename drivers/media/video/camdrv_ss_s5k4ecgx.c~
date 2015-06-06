@@ -2971,26 +2971,21 @@ int camdrv_ss_s5k4ecgx_get_sensor_param_for_exif(
 	{
 		case FLASH_MODE_ON:
 		//snprintf(str1, 19, "%d", 9);
-		strcpy(exif_param->flash,		"");
 		break;
 		
 		case FLASH_MODE_OFF:
 		//snprintf(str1, 19, "%d", 0);//strcpy(str1,"OFF");
-		strcpy(exif_param->flash,		"");
 		break;
 
 		case FLASH_MODE_AUTO:
-		if(state->camera_flash_fire){
-		strcpy(exif_param->flash,		"");	
+		if(state->camera_flash_fire)
+			
 		//snprintf(str1, 19, "%d", 25);//strcpy(str1,"AUTO");
-		}else{ 
+		else 
 		//snprintf(str1, 19, "%d", 24);	
-		strcpy(exif_param->flash,		"");
-		}
 		break;
 		
 		default:
-		strcpy(exif_param->flash,		"");
 		//strcpy(str1,"");
 	}
 
