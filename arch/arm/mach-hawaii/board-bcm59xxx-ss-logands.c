@@ -1043,13 +1043,6 @@ static struct batt_volt_cap_map ss_eb425161_volt_cap_lut[] = {
     {3599, 5},
     {3578, 4},
     {3552, 3},
-
-#if 0
-    {3517, 2},
-    {3466, 1},
-    {3400, 0},
-#endif
-
 	{3400, 2},
 	{3360, 1},
 	{3300, 0},
@@ -1077,12 +1070,6 @@ static struct batt_cutoff_cap_map ss_eb425161_cutoff_cap_lut[] = {
 	{3380, 2},
 	{3340, 1},
 	{3300, 0},
-
-#if 0
-	{3480, 2},
-	{3440, 1},
-	{3400, 0},
-#endif
 };
 
 /* SS EB425161 profile */
@@ -1174,7 +1161,7 @@ static struct batt_esr_temp_lut ss_eb425161_esr_temp_lut[] = {
 /* SS EB425161 profile */
 static struct bcmpmu_batt_property ss_eb425161_props = {
 	.model = "SS EB425161",
-	.min_volt = 3300,
+	.min_volt = 3200,
 	.max_volt = 4350,
 	.full_cap = 1500 * 3600,
 	.one_c_rate = 1500,
@@ -1189,7 +1176,7 @@ static struct bcmpmu_batt_property ss_eb425161_props = {
 };
 
 static struct bcmpmu_batt_cap_levels ss_eb425161_cap_levels = {
-	.critical = 2,
+	.critical = 5,
 	.low = 15,
 	.normal = 75,
 	.high = 95,
@@ -1209,7 +1196,7 @@ static struct bcmpmu_batt_volt_levels ss_eb425161_volt_levels = {
 
 static struct bcmpmu_batt_cal_data ss_eb425161_cal_data = {
 	.volt_low = 3550,
-	.cap_low = 2, //	e098be3aad24a391f165954e75d550da7596bf04 
+	.cap_low = 5, //	e098be3aad24a391f165954e75d550da7596bf04 
 };
 
 static struct bcmpmu_fg_pdata fg_pdata = {
