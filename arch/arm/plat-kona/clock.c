@@ -2257,7 +2257,7 @@ static int ccu_clk_write_access_enable(struct ccu_clk *ccu_clk, int enable)
 static int ccu_clk_policy_engine_resume(struct ccu_clk *ccu_clk, int load_type)
 {
 	u32 reg_val = 0;
-	u32 insurance = 10000;
+	u32 insurance = POLICY_RESUME_INS_COUNT;
 
 	if (ccu_clk->pol_engine_dis_cnt == 0)
 		return 0;	/*Already in running state ?? */
@@ -2296,7 +2296,7 @@ static int ccu_clk_policy_engine_resume(struct ccu_clk *ccu_clk, int load_type)
 static int ccu_clk_policy_engine_stop(struct ccu_clk *ccu_clk)
 {
 	u32 reg_val = 0;
-	u32 insurance = 10000;
+	u32 insurance = POLICY_RESUME_INS_COUNT;
 
 	if (ccu_clk->pol_engine_dis_cnt++ != 0)
 		return 0;	/*Already in disabled state */
@@ -3143,7 +3143,7 @@ static int peri_clk_enable(struct clk *clk, int enable)
 				   peri_clk->clk_gate_offset));
 			insurance++;
 		} while (!(GET_BIT_USING_MASK(reg_val, peri_clk->stprsts_mask))
-			 && insurance < 1000);
+			 && insurance < CLK_EN_INS_COUNT);
 	} else {
 		do {
 			udelay(1);
@@ -3153,11 +3153,12 @@ static int peri_clk_enable(struct clk *clk, int enable)
 				   peri_clk->clk_gate_offset));
 			insurance++;
 		} while ((GET_BIT_USING_MASK(reg_val, peri_clk->stprsts_mask))
-			 && insurance < 1000);
+			 && insurance < CLK_EN_INS_COUNT);
 	}
-	WARN_ON(insurance >= 1000);
-	if (insurance >= 1000)
+	if (insurance >= CLK_EN_INS_COUNT) {
+		__WARN();
 		ret = -EINVAL;
+	}	
 	clk_dbg("%s:%s clk after stprsts start\n", __func__, clk->name);
 
 	/* disable write access */
@@ -3443,9 +3444,9 @@ static int peri_clk_set_rate(struct clk *clk, u32 rate)
 			insurance++;
 		}
 		while ((GET_BIT_USING_MASK(reg_val, clk_div->div_trig_mask))
-		       && insurance < 1000);
-		WARN_ON(insurance >= 1000);
-		if (insurance >= 1000) {
+		        && insurance < CLK_EN_INS_COUNT);
+		if (insurance >= CLK_EN_INS_COUNT) {
+			__WARN();
 			ret = -EINVAL;
 			goto err;
 		}
@@ -3475,9 +3476,9 @@ static int peri_clk_set_rate(struct clk *clk, u32 rate)
 			insurance++;
 		}
 		while ((GET_BIT_USING_MASK(reg_val, clk_div->prediv_trig_mask))
-		       && insurance < 1000);
-		WARN_ON(insurance >= 1000);
-		if (insurance >= 1000) {
+		        && insurance < CLK_EN_INS_COUNT);
+		if (insurance >= CLK_EN_INS_COUNT) {
+			__WARN();
 			ret = -EINVAL;
 			goto err;
 		}
@@ -3901,7 +3902,7 @@ static int bus_clk_enable(struct clk *clk, int enable)
 				  (bus_clk->ccu_clk, bus_clk->clk_gate_offset));
 			insurance++;
 		} while (!(GET_BIT_USING_MASK(reg_val, bus_clk->stprsts_mask))
-			 && insurance < 1000);
+			  && insurance < CLK_EN_INS_COUNT);
 
 	} else {
 		do {
@@ -3911,12 +3912,12 @@ static int bus_clk_enable(struct clk *clk, int enable)
 				  (bus_clk->ccu_clk, bus_clk->clk_gate_offset));
 			insurance++;
 		} while ((GET_BIT_USING_MASK(reg_val, bus_clk->stprsts_mask))
-			 && insurance < 1000);
+			 && insurance < CLK_EN_INS_COUNT);
 	}
-	WARN_ON(insurance >= 1000);
-	if (insurance >= 1000)
+	if (insurance >= CLK_EN_INS_COUNT) {
+		__WARN();
 		ret = -EINVAL;
-
+	}
 	clk_dbg("%s:%s clk after stprsts start\n", __func__, clk->name);
 
 	/* disable write access */
@@ -4495,8 +4496,9 @@ static int pll_clk_set_rate(struct clk *clk, u32 rate)
 				  (pll_clk->ccu_clk, pll_clk->pll_lock_offset));
 			insurance++;
 		} while (!(GET_BIT_USING_MASK(reg_val, pll_clk->pll_lock))
-			 && insurance < 1000);
-		if (insurance >= 1000 && !(clk->flags & DELAYED_PLL_LOCK)) {
+			 && insurance < CLK_EN_INS_COUNT);
+		if (insurance >= CLK_EN_INS_COUNT &&
+				!(clk->flags & DELAYED_PLL_LOCK)) {
 			__WARN();
 			ret = -EINVAL;
 		}
@@ -4595,10 +4597,11 @@ static int pll_clk_enable(struct clk *clk, int enable)
 				  (pll_clk->ccu_clk, pll_clk->pll_lock_offset));
 			insurance++;
 		} while (!(GET_BIT_USING_MASK(reg_val, pll_clk->pll_lock))
-			 && insurance < 1000);
-		WARN_ON(insurance >= 1000);
-		if (insurance >= 1000)
+			  && insurance < CLK_EN_INS_COUNT);
+		if (insurance >= 1000) {
+			__WARN();
 			ret = -EINVAL;
+		}	
 	}
 
 auto_gated:
