@@ -1014,9 +1014,9 @@ struct bcmpmu_adc_pdata adc_pdata[PMU_ADC_CHANN_MAX] = {
 };
 
 
-/* SS EB425161 profile */
+/* SS B100BE profile */
 /* Logan rev 02 battery profile CSP 626787 */
-static struct batt_volt_cap_map ss_eb425161_volt_cap_lut[] = {
+static struct batt_volt_cap_map ss_logands_volt_cap_lut[] = {
     {4321, 100},
     {4250, 95},
     {4183, 90},
@@ -1058,7 +1058,7 @@ static struct batt_volt_cap_map ss_eb425161_volt_cap_lut[] = {
 
 };
 
-static struct batt_eoc_curr_cap_map ss_eb425161_eoc_cap_lut[] = {
+static struct batt_eoc_curr_cap_map ss_logands_eoc_cap_lut[] = {
 	 {290, 90},
 	 {270, 91},
 	 {250, 92},
@@ -1073,7 +1073,7 @@ static struct batt_eoc_curr_cap_map ss_eb425161_eoc_cap_lut[] = {
 	 {0, 100},
 };
 
-static struct batt_cutoff_cap_map ss_eb425161_cutoff_cap_lut[] = {
+static struct batt_cutoff_cap_map ss_logands_cutoff_cap_lut[] = {
 
 	{3380, 2},
 	{3340, 1},
@@ -1086,9 +1086,9 @@ static struct batt_cutoff_cap_map ss_eb425161_cutoff_cap_lut[] = {
 #endif
 };
 
-/* SS EB425161 profile */
+/* SS B100BE profile */
 /* Logan rev 02 battery profile CSP 626787 */
-static struct batt_esr_temp_lut ss_eb425161_esr_temp_lut[] = {
+static struct batt_esr_temp_lut ss_logands_esr_temp_lut[] = {
 	{
 		.temp = -200,
 		.reset = 0, .fct = 271, .guardband = 50,
@@ -1172,32 +1172,32 @@ static struct batt_esr_temp_lut ss_eb425161_esr_temp_lut[] = {
 	},
 };
 
-/* SS EB425161 profile */
-static struct bcmpmu_batt_property ss_eb425161_props = {
-	.model = "SS EB425161",
+/* SS B100BE profile */
+static struct bcmpmu_batt_property ss_logands_props = {
+	.model = "SS B100BE",
 	.min_volt = 3300,
 	.max_volt = 4350,
 	.full_cap = 1500 * 3600,
 	.one_c_rate = 1500,
-	.volt_cap_lut = ss_eb425161_volt_cap_lut,
-	.volt_cap_lut_sz = ARRAY_SIZE(ss_eb425161_volt_cap_lut),
-	.esr_temp_lut = ss_eb425161_esr_temp_lut,
-	.esr_temp_lut_sz = ARRAY_SIZE(ss_eb425161_esr_temp_lut),
-	.eoc_cap_lut = ss_eb425161_eoc_cap_lut,
-	.eoc_cap_lut_sz = ARRAY_SIZE(ss_eb425161_eoc_cap_lut),
-	.cutoff_cap_lut = ss_eb425161_cutoff_cap_lut,
-	.cutoff_cap_lut_sz = ARRAY_SIZE(ss_eb425161_cutoff_cap_lut),
+	.volt_cap_lut = ss_logands_volt_cap_lut,
+	.volt_cap_lut_sz = ARRAY_SIZE(ss_logands_volt_cap_lut),
+	.esr_temp_lut = ss_logands_esr_temp_lut,
+	.esr_temp_lut_sz = ARRAY_SIZE(ss_logands_esr_temp_lut),
+	.eoc_cap_lut = ss_logands_eoc_cap_lut,
+	.eoc_cap_lut_sz = ARRAY_SIZE(ss_logands_eoc_cap_lut),
+	.cutoff_cap_lut = ss_logands_cutoff_cap_lut,
+	.cutoff_cap_lut_sz = ARRAY_SIZE(ss_logands_cutoff_cap_lut),
 };
 
-static struct bcmpmu_batt_cap_levels ss_eb425161_cap_levels = {
+static struct bcmpmu_batt_cap_levels ss_logands_cap_levels = {
 	.critical = 2,
 	.low = 15,
 	.normal = 75,
 	.high = 95,
 };
 
-/* SS EB425161 profile */
-static struct bcmpmu_batt_volt_levels ss_eb425161_volt_levels = {
+/* SS B100BE profile */
+static struct bcmpmu_batt_volt_levels ss_logands_volt_levels = {
 	.critical = 3380,
 	.low = 3500,
 	.normal = 3700,
@@ -1208,16 +1208,16 @@ static struct bcmpmu_batt_volt_levels ss_eb425161_volt_levels = {
 	.vfloat_gap = 150, /* in mV */
 };
 
-static struct bcmpmu_batt_cal_data ss_eb425161_cal_data = {
+static struct bcmpmu_batt_cal_data ss_logands_cal_data = {
 	.volt_low = 3550,
 	.cap_low = 2, //	e098be3aad24a391f165954e75d550da7596bf04 
 };
 
 static struct bcmpmu_fg_pdata fg_pdata = {
-	.batt_prop = &ss_eb425161_props,
-	.cap_levels = &ss_eb425161_cap_levels,
-	.volt_levels = &ss_eb425161_volt_levels,
-	.cal_data = &ss_eb425161_cal_data,
+	.batt_prop = &ss_logands_props,
+	.cap_levels = &ss_logands_cap_levels,
+	.volt_levels = &ss_logands_volt_levels,
+	.cal_data = &ss_logands_cal_data,
 	.sns_resist = 10,
 	.sys_impedence = 33,
 	/* End of charge current in mA */ /* Samsung spec TBD */
@@ -1228,8 +1228,8 @@ static struct bcmpmu_fg_pdata fg_pdata = {
 	.sleep_current_ua = 1460,
 	.sleep_sample_rate = 32000,
 
-	/* Logan02DS BA100E: May 16 2013 Test.. 989 min err -2.75852 */
-	.fg_factor = 972,
+	/* Logan00DS B100BE: 2.2% max err. Apr 8 2013 */
+	.fg_factor = 950,
 
 	.poll_rate_low_batt =  30000, /* every 30 seconds */
 	.poll_rate_crit_batt = 5000, /* every 5 Seconds */
