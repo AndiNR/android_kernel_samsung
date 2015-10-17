@@ -1,0 +1,12 @@
+--- kernel/futex.c
++++ kernel/futex.c
+@@ -2272,9 +2272,6 @@
+ 	struct futex_q q = futex_q_init;
+ 	int res, ret;
+ 
+-	if (uaddr == uaddr2)
+-		return -EINVAL;
+-
+ 	if (!bitset)
+ 		return -EINVAL;
+ 
